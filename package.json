@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "cd frontend && vite",
+    "server": "node server.js",
+    "build": "cd frontend && vite build",
+    "start": "npm run build && NODE_ENV=production node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +20,12 @@
     "url": "https://github.com/ragamo/q2mon/issues"
   },
   "homepage": "https://github.com/ragamo/q2mon#readme",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "express": "^4.18.2",
+    "three": "^0.158.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.8"
+  }
 }

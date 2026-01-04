@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Q2 Monitor - Visualización 3D</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        overflow: hidden;
+        background: #1a1a1a;
+        color: #fff;
+      }
+
+      #canvas-container {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+      }
+
+      #info {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 15px;
+        border-radius: 8px;
+        font-size: 14px;
+        z-index: 100;
+        min-width: 250px;
+      }
+
+      #info h2 {
+        margin-bottom: 10px;
+        font-size: 18px;
+        color: #4a9eff;
+      }
+
+      #info .status {
+        margin: 5px 0;
+      }
+
+      #info .status.connected {
+        color: #4ade80;
+      }
+
+      #info .status.disconnected {
+        color: #f87171;
+      }
+
+      #info .status.connecting {
+        color: #fbbf24;
+      }
+
+      #players-list {
+        margin-top: 15px;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .player-item {
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .player-item:last-child {
+        border-bottom: none;
+      }
+
+      .player-name {
+        font-weight: 600;
+        color: #fff;
+      }
+
+      .player-pos {
+        font-size: 12px;
+        color: #9ca3af;
+        margin-top: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvas-container">
+      <div id="info">
+        <h2>Q2 Monitor 3D</h2>
+        <div id="status" class="status disconnected">Desconectado</div>
+        <div
+          id="server-info"
+          style="margin-top: 10px; font-size: 12px; color: #9ca3af"
+        ></div>
+        <div id="players-list"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -58,9 +58,9 @@ client.on("player_update", (event) => {
   }
 
   // Otros jugadores
-  /* console.log(
+  console.log(
     `👥 [${getShortTimestamp()}] ${p.name}: pos=${posStr} alive=${p.alive}`
-  ); */
+  );
 });
 
 // Actualizaciones de entidades (items, proyectiles, etc)
