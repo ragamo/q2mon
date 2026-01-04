@@ -21,7 +21,7 @@ const client = new Q2Client({
   passiveMode: PASSIVE_MODE,
   monitorMode: MONITOR_MODE,
   debug: DEBUG_MODE,
-  playerName: "Q2Monitor",
+  playerName: "Spectre",
   monitorInterval: 5000,
 });
 
@@ -43,8 +43,6 @@ client.on("console_message", (event) => {
 
 // Actualizaciones de jugadores (posición, estado)
 client.on("player_update", (event) => {
-  console.log(event);
-  return;
   const p = event.data;
   const pos = p.position;
   const posStr = pos
@@ -60,9 +58,9 @@ client.on("player_update", (event) => {
   }
 
   // Otros jugadores
-  console.log(
+  /* console.log(
     `👥 [${getShortTimestamp()}] ${p.name}: pos=${posStr} alive=${p.alive}`
-  );
+  ); */
 });
 
 // Actualizaciones de entidades (items, proyectiles, etc)

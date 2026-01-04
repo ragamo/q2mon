@@ -1793,21 +1793,24 @@ export class Q2Client extends EventEmitter {
     if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
     if (this.keepAliveInterval) clearInterval(this.keepAliveInterval);
 
+    // Movimiento cada 100ms cuando spawneado, cada 300ms durante handshake
     this.heartbeatInterval = setInterval(
       () => {
         if (!this.isConnected) return;
 
         if (this.connectionState === "spawned") {
-          // Send NOP keepalive
+          // Send NOP keepalive cuando está spawned
           const nopPacket = Buffer.from([CLC.NOP]);
           this.sendSequencedResponse(nopPacket, false);
         } else {
+          // Durante handshake, enviar keepalive vacío
           this.sendSequencedResponse();
         }
       },
       this.connectionState === "spawned" ? 100 : 300
     );
 
+    // NOP backup cada 10 segundos
     this.keepAliveInterval = setInterval(() => {
       if (this.isConnected) {
         this.sendSequencedResponse(Buffer.from([CLC.NOP]), false);
@@ -1985,13 +1988,18 @@ export class Q2Client extends EventEmitter {
         break;
 
       case "sequenced":
-        if (parsed.error) return;
+        if (parsed.error) {
+          // No responder a paquetes con errores de parsing
+          return;
+        }
 
+        // Verificar si es un paquete duplicado (ignorar bits de reliable/fragment al comparar)
         if (
           parsed.sequence <= this.incomingSequence &&
           this.incomingSequence > 0 &&
           !parsed.fragmented
         ) {
+          // Paquete duplicado - ignorar sin responder
           return;
         }
 
@@ -2007,6 +2015,7 @@ export class Q2Client extends EventEmitter {
           }
 
           if (parsed.fragmentOffset !== this.fragmentBuffer.length) {
+            // Fragmento fuera de orden - ignorar sin responder
             return;
           }
 
@@ -2018,6 +2027,7 @@ export class Q2Client extends EventEmitter {
           }
 
           if (parsed.moreFragments) {
+            // Esperando más fragmentos - no responder hasta tener el paquete completo
             return;
           }
 
@@ -2062,6 +2072,8 @@ export class Q2Client extends EventEmitter {
                   this.entityTracker.reset();
 
                   setTimeout(() => this.sendNewCommand(), 500);
+                  // Responder antes de return para mantener la conexión
+                  this.sendSequencedResponse();
                   return;
                 }
 
@@ -2181,6 +2193,7 @@ export class Q2Client extends EventEmitter {
           }
         }
 
+        // Responder al servidor para mantener la conexión
         this.sendSequencedResponse();
         break;
     }
