@@ -2155,7 +2155,7 @@ export class Q2Client extends EventEmitter {
                   fov: m.data.fov,
                   isLocalPlayer: true,
                 });
-                break; */
+                break;
 
               case "entity_state":
                 const entityType = this.getEntityType(m.data);
@@ -2189,6 +2189,7 @@ export class Q2Client extends EventEmitter {
                   });
                 }
                 break;
+                */
             }
           }
         }
