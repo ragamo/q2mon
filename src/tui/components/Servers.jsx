@@ -23,8 +23,7 @@ const fetchServersData = async () => {
 };
 
 export const Servers = ({ onChange, onSelect }) => {
-  // const { height } = useScreenSize();
-  const height = 10;
+  const { height } = useScreenSize();
   const [loading, setLoading] = useState(true);
   const [servers, setServers] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);

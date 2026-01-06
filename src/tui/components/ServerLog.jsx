@@ -1,9 +1,9 @@
-import { Box, Text } from "ink";
+import { Box, Text, Newline } from "ink";
 import { Q2Client } from "../../libs/q2client";
 import { useState, useEffect } from "react";
 
 function getShortTimestamp() {
-  return new Date().toISOString().split("T")[1].slice(0, 12);
+  return new Date().toISOString().split("T")[1].slice(0, 8);
 }
 
 export const ServerLog = ({ host, port }) => {
@@ -21,8 +21,9 @@ export const ServerLog = ({ host, port }) => {
     });
 
     q2Client.on("console_message", (event) => {
-      const { level, text } = event.data;
-      setLog((prev) => [...prev, `${getShortTimestamp()} [${level}] ${text}`]);
+      // const { level, text } = event.data;
+      // setLog((prev) => [...prev, `${getShortTimestamp()} ${text}`]);
+      setLog((prev) => [...prev, { ts: getShortTimestamp(), ...event.data }]);
     });
 
     /* q2Client.on("raw_message", (event) => {
@@ -42,8 +43,23 @@ export const ServerLog = ({ host, port }) => {
   }, [host, port]);
 
   return (
-    <Box>
-      {loading ? <Text>Loading...</Text> : <Text>{log.join("\n")}</Text>}
+    <Box flexDirection="column">
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        log.map((logEvent) => (
+          <Box key={logEvent.ts} flexDirection="row">
+            <Box width={10}>
+              <Text color="grey">{logEvent.ts}</Text>
+            </Box>
+            <Box>
+              <Text color={logEvent.level === "CHAT" ? "green" : "white"}>
+                {logEvent.text}
+              </Text>
+            </Box>
+          </Box>
+        ))
+      )}
     </Box>
   );
 };
