@@ -1,6 +1,6 @@
 import dgram from "dgram";
 
-export const getServerStatus = (serverIp, serverPort) => {
+export const getServerStatus = (host, port) => {
   return new Promise((resolve, reject) => {
     const payload = Buffer.concat([
       Buffer.from([0xff, 0xff, 0xff, 0xff]),
@@ -12,12 +12,12 @@ export const getServerStatus = (serverIp, serverPort) => {
       socket.close();
       reject(
         new Error(
-          `Timeout: No se recibió respuesta del servidor: ${serverIp}:${serverPort}`
+          `Timeout: No se recibió respuesta del servidor: ${host}:${port}`
         )
       );
     }, 1000);
 
-    socket.send(payload, serverPort, serverIp, (err) => {
+    socket.send(payload, port, host, (err) => {
       if (err) {
         reject(new Error(`❌ Error al enviar status: ${err.message}`));
         clearTimeout(timeout);
@@ -61,7 +61,11 @@ export const getServerStatus = (serverIp, serverPort) => {
           }
         }
 
-        const result = { config, players };
+        const result = {
+          config,
+          players,
+          net: { host, port },
+        };
         resolve(result);
       } catch (error) {
         reject(new Error(`❌ Error al parsear respuesta: ${error.message}`));

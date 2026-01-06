@@ -6,8 +6,8 @@ export const ServerPlayers = ({ server }) => {
   const headers = ["Player", "Frags", "Ping"];
 
   return (
-    <Box flexDirection="column" flexGrow={1}>
-      <Box marginBottom={0}>
+    <Box flexDirection="column" width={"100%"}>
+      <Box marginBottom={0} justifyContent="space-between">
         <Text color="cyan" bold>
           {headers[0]}
         </Text>
@@ -20,10 +20,10 @@ export const ServerPlayers = ({ server }) => {
       </Box>
 
       {server.players.map((row, index) => (
-        <Box key={index}>
+        <Box key={index} justifyContent="space-between">
           <Text color="yellow">{String(row.name).padEnd(20)}</Text>
           <Text>{String(row.frags)}</Text>
-          <Text>asdas</Text>
+          <Text>{String(row.ping)}</Text>
         </Box>
       ))}
     </Box>

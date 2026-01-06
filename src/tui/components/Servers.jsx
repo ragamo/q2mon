@@ -22,7 +22,7 @@ const fetchServersData = async () => {
   return resolved.map((status) => status.value);
 };
 
-export const Servers = ({ onSelect }) => {
+export const Servers = ({ onChange, onSelect }) => {
   // const { height } = useScreenSize();
   const height = 10;
   const [loading, setLoading] = useState(true);
@@ -35,8 +35,8 @@ export const Servers = ({ onSelect }) => {
       const filteredStatuses = statuses.filter(Boolean);
       setServers(filteredStatuses);
       setLoading(false);
-      if (onSelect) {
-        onSelect(filteredStatuses[0]);
+      if (onChange) {
+        onChange(filteredStatuses[0]);
       }
     };
     fetchServers();
@@ -56,10 +56,13 @@ export const Servers = ({ onSelect }) => {
       setSelectedIndex(servers.length - 1); // Jump to last
     }
     if (key.return) {
-      console.log(`Selected: ${servers[selectedIndex]}`);
+      if (onSelect) {
+        onSelect(servers[selectedIndex]);
+        return;
+      }
     }
-    if (onSelect) {
-      onSelect(servers[selectedIndex]);
+    if (onChange) {
+      onChange(servers[selectedIndex]);
     }
   });
 

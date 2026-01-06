@@ -6,20 +6,22 @@ import { withFullScreen, useScreenSize } from "fullscreen-ink";
 import { ServerConfig } from "./components/ServerConfig";
 import { ServerPlayers } from "./components/ServerPlayers";
 import { ScrollView } from "ink-scroll-view";
+import { ServerLog } from "./components/ServerLog";
 
 const App = () => {
-  // const { height } = useScreenSize();
+  const { height } = useScreenSize();
   const [selectedServer, setSelectedServer] = useState(null);
+  const [loggedServer, setLoggedServer] = useState(null);
 
   return (
-    <Box width={"100%"} height={25} flexDirection="row">
+    <Box width={"100%"} height={height} flexDirection="row">
       <TitledBox
         borderStyle="single"
         titles={["Quake 2 Servers"]}
         titleStyle={titleStyles.bold}
         width={"100%"}
       >
-        <Servers onSelect={setSelectedServer} />
+        <Servers onChange={setSelectedServer} onSelect={setLoggedServer} />
       </TitledBox>
       {selectedServer && (
         <Box
@@ -28,15 +30,36 @@ const App = () => {
           borderStyle="single"
           flexDirection="column"
         >
-          <Box flexGrow={1}>
-            <ScrollView height={5}>
+          <Box flexGrow={1} width={"100%"}>
+            <ServerPlayers server={selectedServer} />
+          </Box>
+          <Box
+            flexGrow={1}
+            borderStyle="single"
+            borderBottom={false}
+            borderLeft={false}
+            borderRight={false}
+          >
+            <ScrollView>
               <ServerConfig server={selectedServer} />
             </ScrollView>
           </Box>
-          <Box flexGrow={1}>
-            <ServerPlayers server={selectedServer} />
-          </Box>
         </Box>
+      )}
+      {loggedServer && (
+        <TitledBox
+          borderStyle="single"
+          titles={["Server Log"]}
+          titleStyle={titleStyles.bold}
+          width={"100%"}
+        >
+          <ScrollView>
+            <ServerLog
+              host={loggedServer.net.host}
+              port={loggedServer.net.port}
+            />
+          </ScrollView>
+        </TitledBox>
       )}
     </Box>
   );
